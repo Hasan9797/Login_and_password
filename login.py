@@ -39,7 +39,7 @@ class Login:
             new_user_name = input("Enter your name: ").strip().capitalize()
 
         new_user_login = input("Enter your login: ").strip()
-        while not new_user_login.isalnum():
+        while not new_user_login.isalnum() or self.check_login(new_user_login)
             self.clear()
             print("You made a mistake, Please try again")
             new_user_login = input("Enter your login: ").strip()
@@ -70,10 +70,65 @@ class Login:
         self.my_db.commit()
 
     def login_(self):
-        pass
+         old_login = input("Enter your login: ").strip()
+        old_password = input("Enter your password: ").strip()
+        while not self.check_login_and_password(old_login, old_password):
+            self.clear()
+            print("Your login and password wrong, please try again")
+            old_login = input("Enter your login: ").strip()
+            old_password = input("Enter your password: ").strip()
+
+        self.old_login_and_pass = old_login
+
+        self.show_login()
+        user_choice = input("Enter number: ").strip()
+        while user_choice not in self.number:
+            self.clear()
+            print("You made a mistake, Please enter number!")
+            user_choice = input("Enter number: ").strip()
+
+        if user_choice == self.number[0]:
+            self.change_login_and_password()
+        elif user_choice == self.number[1]:
+            self.delete_account()
+        else:
+            self.log_out()
 
     def change_login_and_password(self):
-        pass
+        new_login_old_user = input("Enter your new login: ").strip()
+        while not new_login_old_user.isalnum() or self.check_login(new_login_old_user):
+            self.clear()
+            print("You made a mistake, Please try again")
+            new_login_old_user = input("Enter your new login: ").strip()
+
+        new_password_old_user = input("Enter your new password: ").strip()
+        new_check_password_old_user = input("Enter your check password: ").strip()
+        while new_password_old_user == "" or new_password_old_user != new_check_password_old_user:
+            self.clear()
+            print("You made a mistake, Please try again")
+            new_password_old_user = input("Enter your new password: ").strip()
+            new_check_password_old_user = input("Enter your check password: ").strip()
+
+        self.my_cursor.execute(f"update account set login='{new_login_old_user}', "
+                               f"password='{new_password_old_user}' where login='{self.old_login_and_pass}'")
+        self.my_db.commit()
+
+        print("Your login and password have been changed!")
+        def check_login_and_password(self, old_log, old_pass):
+        self.my_cursor.execute(f"select * from account where login='{old_log}' and password='{old_pass}'")
+        user_print = self.my_cursor.fetchall()
+        if user_print:
+            return True
+        else:
+            return False
+
+    def check_login(self, check_user):
+        self.my_cursor.execute(f"select * from account where login='{check_user}'")
+        user_print = self.my_cursor.fetchall()
+        if user_print:
+            return True
+        else:
+            return False
 
     def delete_account(self):
         pass
