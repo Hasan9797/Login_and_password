@@ -17,7 +17,7 @@ class Login:
 "name varchar(30), login varchar(30), password varchar(30), age int(3))")
 
     def choice(self):
-    self.clear()
+        self.clear()
         self.show()
 
         number = input("Enter number  [1/2]: ").strip()
@@ -71,28 +71,16 @@ class Login:
 
     def login_(self):
          old_login = input("Enter your login: ").strip()
-        old_password = input("Enter your password: ").strip()
-        while not self.check_login_and_password(old_login, old_password):
+         old_password = input("Enter your password: ").strip()
+         while not self.check_login_and_password(old_login, old_password):
             self.clear()
             print("Your login and password wrong, please try again")
             old_login = input("Enter your login: ").strip()
             old_password = input("Enter your password: ").strip()
 
-        self.old_login_and_pass = old_login
+         self.old_login_and_pass = old_login
 
-        self.show_login()
-        user_choice = input("Enter number: ").strip()
-        while user_choice not in self.number:
-            self.clear()
-            print("You made a mistake, Please enter number!")
-            user_choice = input("Enter number: ").strip()
-
-        if user_choice == self.number[0]:
-            self.change_login_and_password()
-        elif user_choice == self.number[1]:
-            self.delete_account()
-        else:
-            self.log_out()
+         self.show_login()
 
     def change_login_and_password(self):
         new_login_old_user = input("Enter your new login: ").strip()
@@ -113,7 +101,12 @@ class Login:
                                f"password='{new_password_old_user}' where login='{self.old_login_and_pass}'")
         self.my_db.commit()
 
-        print("Your login and password have been changed!")
+        print("\nYour login and password have been changed!")
+
+        self.back()
+        if self.back():
+            self.clear()
+            self.show_login()
 
     def check_login_and_password(self, old_log, old_pass):
         self.my_cursor.execute(f"select * from account where login='{old_log}' and password='{old_pass}'")
@@ -132,10 +125,48 @@ class Login:
             return False
 
     def delete_account(self):
-        pass
+         self.clear()
+         self.my_cursor.execute(f"delete from account where login='{self.old_login_and_pass}'")
+         self.my_db.commit()
+
+         print("\nYour account has been deleted")
+
+         self.back()
+         if self.back():
+            self.choice()
 
     def log_out(self):
-        pass
+        self.choice()
+
+    def back(self):
+        back = input("Press the >> B << button to go back : ").strip().lower()
+        while back != "b":
+            print("You made a mistake, Please try again")
+            back = input("Press the >> B << button to go back : ").strip().lower()
+        if back == "b":
+            return True
+        else:
+            return False
+
+    def show_login(self):
+        self.clear()
+        print("""
+        Change Login and password     >>1<<
+        Delete account                >>2<<
+        log out                       >>3<<
+        """)
+        user_choice = input("Enter number: ").strip()
+        while user_choice not in self.number:
+            self.clear()
+            print("You made a mistake, Please enter number!")
+            user_choice = input("Enter number: ").strip()
+
+        if user_choice == self.number[0]:
+            self.change_login_and_password()
+        elif user_choice == self.number[1]:
+            self.delete_account()
+        else:
+            self.log_out()
 
 
 
