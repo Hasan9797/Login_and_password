@@ -9,9 +9,22 @@ class Login:
         self.login = login
         self.password = password
         self.age = age
+        sel.number = ["1","2","3"]
 
     def choice(self):
-        pass
+    self.clear()
+        self.show()
+
+        number = input("Enter number  [1/2]: ").strip()
+        while number not in self.number[:2]:
+            self.clear()
+            print("you have entered the wrong number, please enter 1 or 2 ")
+            number = input("Enter number  [1/2]: ").strip()
+
+        if number == self.number[0]:
+            self.registration()
+        else:
+            self.login_()
 
     def registration(self):
         pass
