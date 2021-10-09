@@ -114,7 +114,8 @@ class Login:
         self.my_db.commit()
 
         print("Your login and password have been changed!")
-        def check_login_and_password(self, old_log, old_pass):
+
+    def check_login_and_password(self, old_log, old_pass):
         self.my_cursor.execute(f"select * from account where login='{old_log}' and password='{old_pass}'")
         user_print = self.my_cursor.fetchall()
         if user_print:
